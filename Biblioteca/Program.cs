@@ -55,16 +55,21 @@ namespace Biblioteca
         public static void Acervo()
         {
             Console.Clear();
-
-            WebClient servd = new WebClient();
-            Stream ler = servd.OpenRead("https://github.com/jarnunes/Biblioteca/blob/master/Biblioteca/arquivos/livros.txt");
-            StreamReader livros = new StreamReader(ler);
-
+            Console.WriteLine("==========ACERVO==========");
+            string[] aux;
+            string[] descricao = { "Código", "Título", "Categoria" };
+            StreamReader livros = null;
             try
             {
+                livros = new StreamReader(@"../../../arquivos/livros.txt");
                 while (livros.EndOfStream != true)
                 {
-                    Console.WriteLine(livros.ReadLine().Split(";"));
+                    aux = livros.ReadLine().Split(";");
+                    for (int i = 0; i < aux.Length; i++)
+                    {
+                        Console.WriteLine($"{descricao[i]} : {aux[i]}");
+                    }
+                    Console.WriteLine("\n-----------------\n");
                 }
             }
             catch (Exception erro)
@@ -74,6 +79,8 @@ namespace Biblioteca
             finally
             {
                 livros.Close();
+                Console.WriteLine("Pressione Enter para sair!");
+                Console.ReadKey();
             }
         }
         /// <summary>
@@ -91,7 +98,7 @@ namespace Biblioteca
             do
             {
                 op = Menu();
-                
+
                 switch (op)
                 {
                     case 1:
