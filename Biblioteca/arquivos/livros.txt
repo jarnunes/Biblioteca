@@ -1,10 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+00423;Armas Químicas: o Mau Uso da Toxicologia;Físico
 
-namespace Biblioteca.arquivos
-{
-    class livros
-    {
-    }
-}
+00420;O Gene;Físico
+
+00476;Cinquenta Plantas que Mudaram o Rumo da Hisória;Digital
+
+00434;A Longa Marcha dos Grilos Canibais;Digital
+
+00498;A Vida Secreta das Árvores;Físico
+
+00434;Biologia da Conservação;Digital
+
+00549;Fundamentos de Matemática Elementar;Físico
+
+00533;Cálculo Volume 1;Físico
+
+00510;Sou Péssimo em Matemática;Digital
+
+00569;Alice no País do Quantum;Digital
+
+00599;Estatística Básica;Físico
+
+00677;O Poder dos Quietos;Físico
+
+00644; Use a Cabeça! Programação;Físico
+
+00633; Programação Orientada a Objetos com Java: uma introdução prática usando o BlueJ;Digital
+
+00645; C# 6.0 com Visual Studio®: curso completo;Digital
+
+00699; Arquitetura e Organização de Computadores: projeto para o desempenho;Físico
+
+
+
+
+
+
+
+
+
+
+
+
+
+

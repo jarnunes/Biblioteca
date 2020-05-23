@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Net;
+using System.Text;
 
 namespace Biblioteca
 {
@@ -46,14 +49,49 @@ namespace Biblioteca
         public static void Devolver() { }
         public static void Situacao() { }
         public static void LivrosEmprestados() { }
-        public static void Acervo() { }
+        /// <summary>
+        /// Método para ler um arquivo com a lista de livros e listar todos os livros da biblioteca.
+        /// </summary>
+        public static void Acervo()
+        {
+            Console.Clear();
+
+            WebClient servd = new WebClient();
+            Stream ler = servd.OpenRead("https://github.com/jarnunes/Biblioteca/blob/master/Biblioteca/arquivos/livros.txt");
+            StreamReader livros = new StreamReader(ler);
+
+            try
+            {
+                while (livros.EndOfStream != true)
+                {
+                    Console.WriteLine(livros.ReadLine().Split(";"));
+                }
+            }
+            catch (Exception erro)
+            {
+                Console.WriteLine(erro.Message);
+            }
+            finally
+            {
+                livros.Close();
+            }
+        }
+        /// <summary>
+        /// Método para mostrar relatório com todos os livros já emprestados de um determinado usuário incluindo se foram entregues
+        /// atrasados ou dentro do praso
+        /// </summary>
         public static void Relatorio() { }
+        /// <summary>
+        /// Programa principal
+        /// </summary>
+        /// <param name="args"></param>
         public static void Main(string[] args)
         {
             int op;
             do
             {
                 op = Menu();
+                
                 switch (op)
                 {
                     case 1:
