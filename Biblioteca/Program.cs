@@ -45,7 +45,18 @@ namespace Biblioteca
             return op;
         }
 
-        public static void Emprestar() { }
+        public static void Emprestar()
+        {
+            int op = -1;
+            do
+            {
+                Console.Clear();
+
+
+            } while (op.Equals(-1));
+            Console.ReadKey();
+
+        }
         public static void Devolver() { }
         public static void Situacao() { }
         public static void LivrosEmprestados() { }

@@ -31,6 +31,5 @@ namespace Biblioteca
         {
             return categoria.emprestar(usuario, data);
         }
-
     }
 }

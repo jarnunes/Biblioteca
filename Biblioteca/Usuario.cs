@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Biblioteca
@@ -8,6 +10,7 @@ namespace Biblioteca
     {
         protected int codUser;
         protected string nome;
+        protected  ArrayList livrosEmprestados;
 
         /// <summary>
         /// Construtor da Classe usuário
@@ -19,6 +22,7 @@ namespace Biblioteca
         {
             this.nome = nome;
             this.codUser = codUser;
+            this.livrosEmprestados = new ArrayList();
         }
 
         public abstract Operacao emprestar(Livro livro, DateTime data);
