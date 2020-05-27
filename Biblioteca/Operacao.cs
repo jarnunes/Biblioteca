@@ -24,5 +24,17 @@ namespace Biblioteca
             escrever.AppendLine($"{this.livro.getCodLivro()};{this.livro.getTipo()};{this.retirada}");
             return escrever.ToString();
         }
+        public DateTime GetDataRetirada()
+        {
+            return this.retirada;
+        }
+        public DateTime GetDataDevolucao()
+        {
+            return this.devolucao;
+        }
+        public Livro GetLivro()
+        {
+            return this.livro;
+        }
     }
 }

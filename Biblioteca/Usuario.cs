@@ -10,7 +10,8 @@ namespace Biblioteca
     {
         protected int codUser;
         protected string nome;
-        protected  ArrayList livrosEmprestados;
+        protected ArrayList livrosEmprestados;
+        protected List<Operacao> operacoes = new List<Operacao>();
 
         /// <summary>
         /// Construtor da Classe usuário

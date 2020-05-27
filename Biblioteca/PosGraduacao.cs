@@ -7,9 +7,7 @@ namespace Biblioteca
 {
     class PosGraduacao : Usuario
     {
-        public PosGraduacao(string nome, int codUser) : base(nome, codUser)
-        {
-        }
+        public PosGraduacao(string nome, int codUser) : base(nome, codUser) { }
 
         /// <summary>
         /// Método para empréstimos de livros para alunos de Pos-Graduação
@@ -27,30 +25,47 @@ namespace Biblioteca
         }
         public override int devolver(Livro livro, DateTime data)
         {
+            foreach (var item in collection)
+            {
+
+            }
+            for (int i = 0; i < this.operacoes.Count; i++)
+            {
+                if (operacoes[i].GetLivro().Equals(livro))
+                {
+                    TimeSpan diferenca = this.operacoes[i].GetDataDevolucao().Subtract(DateTime.Now);
+                    if (diferenca.TotalDays >= 0)
+                    {
+                        this.operacoes.Add(livro);
+                    }
+                }
+            }
             return 0;
         }
 
+        /// <summary>
+        /// Método para validar a situação de um aluno
+        /// </summary>
+        /// <returns>retorna true caso não tenha livros em atraso, e false caso esteja em atraso.</returns>
         public override bool situacao()
         {
-
-            StreamReader emprestimos = new StreamReader(@"");
-            String[] dadosEmprestimos;
-            int livrosEmprestados = 0;
-            bool situacao = true;
-            while (emprestimos.EndOfStream != true)
+            for (int i = 0; i < this.operacoes.Count; i++)
             {
-                dadosEmprestimos = emprestimos.ReadLine().Split(";");
-
-                if (int.Parse(dadosEmprestimos[0]) == this.codUser)
+                TimeSpan diferenca = DateTime.Now.Subtract(this.operacoes[i].GetDataRetirada());
+                if (diferenca.TotalDays > 7)
                 {
-                    livrosEmprestados++;
+                    return false;
+                }
+                /*else if (operacoes.Count > 7)
+                {
+                    return false;
+                }*/
+                else
+                {
+                    return true;
                 }
             }
-
-            if (livrosEmprestados == 7)
-                situacao = false;
-
-            return situacao;
+            return default;
         }
     }
 }
