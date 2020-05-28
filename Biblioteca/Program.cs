@@ -52,12 +52,45 @@ namespace Biblioteca
             {
                 Console.Clear();
 
+                try
+                {
+                    Console.Write("Informe sua matricula: ");
+                    int matricula = int.Parse(Console.ReadLine());
+                    Console.Write("Informe o código do livro : ");
+                    int codigo = int.Parse(Console.ReadLine());
+
+                }
+                catch (FormatException erro)
+                {
+                    Console.WriteLine(erro.Message);
+                }
+
 
             } while (op.Equals(-1));
             Console.ReadKey();
 
         }
-        public static void Devolver() { }
+        public static void Devolver()
+        {
+            Console.Clear();
+            int op = -1;
+            do
+            {
+
+                try
+
+                {
+                    Console.Write("Digite o código do livro: ");
+                    int cod = int.Parse(Console.ReadLine());
+
+                }
+                catch (FormatException erro)
+                {
+                    Console.WriteLine(erro.Message);
+                }
+            } while (op == -1);
+
+        }
         public static void Situacao() { }
         public static void LivrosEmprestados() { }
         /// <summary>
@@ -98,7 +131,10 @@ namespace Biblioteca
         /// Método para mostrar relatório com todos os livros já emprestados de um determinado usuário incluindo se foram entregues
         /// atrasados ou dentro do praso
         /// </summary>
-        public static void Relatorio() { }
+        public static void Relatorio()
+        {
+
+        }
         /// <summary>
         /// Programa principal
         /// </summary>

@@ -17,7 +17,6 @@ namespace Biblioteca
             this.retirada = retirada;
             this.devolucao = devolucao;
         }
-
         public override string ToString()
         {
             StringBuilder escrever = new StringBuilder();
