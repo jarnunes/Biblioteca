@@ -19,23 +19,15 @@ namespace Biblioteca
         public override Operacao emprestar(Livro livro, DateTime data)
         {
 
-            Operacao aux;
-            if (this.situacaoUsuario)
-            {
-                aux = new Operacao(livro, data, data.AddDays(7));
-                StreamWriter emprestar = new StreamWriter(@"../../../arquivos/emprestimos.txt", true);
-                emprestar.WriteLine($"{this.codUser};{aux.ToString()}");
-                emprestar.Close();
-                return aux;
-            }
-            else
-            {
-                return default;
-            }
+            Operacao aux = new Operacao(livro, data, data.AddDays(7));
+            StreamWriter emprestar = new StreamWriter(@"../../../arquivos/emprestimos.txt", true);
+            emprestar.WriteLine($"{this.codUser};{aux.ToString()}");
+            emprestar.Close();
+            return aux;
         }
         public override int devolver(Livro livro, DateTime data)
         {
-            StreamWriter empresti_dev = new StreamWriter(@"../../../arquivos/emprestimos.txt", true);
+            StreamWriter empresti_dev = new StreamWriter(@"../../../arquivos/relatorio.txt", true);
 
             foreach (Operacao p in operacoes)
             {

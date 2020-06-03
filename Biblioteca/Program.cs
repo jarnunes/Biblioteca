@@ -78,7 +78,6 @@ namespace Biblioteca
             {
 
                 try
-
                 {
                     Console.Write("Digite o código do livro: ");
                     int cod = int.Parse(Console.ReadLine());
@@ -141,6 +140,7 @@ namespace Biblioteca
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+
             int op;
             do
             {
