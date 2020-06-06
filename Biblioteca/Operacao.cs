@@ -17,6 +17,12 @@ namespace Biblioteca
             this.retirada = retirada;
             this.devolucao = devolucao;
         }
+        public Operacao(Livro livro, DateTime retirada){
+            this.livro = livro;
+            this.retirada = retirada;
+            this.devolucao = default;
+        }
+
         public override string ToString()
         {
             StringBuilder escrever = new StringBuilder();
@@ -25,7 +31,11 @@ namespace Biblioteca
         }
         public DateTime GetDataRetirada()
         {
+            
             return this.retirada;
+        }
+        public void setLivro(Livro livro){
+            this.livro= livro;
         }
         public DateTime GetDataDevolucao()
         {

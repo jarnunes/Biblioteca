@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Biblioteca
 {
-     class Livro
+    public class Livro
     {
         protected int ID;
         protected string titulo;
@@ -24,12 +25,15 @@ namespace Biblioteca
         }
         public IEmprestavel getTipo()
         {
+
             return this.categoria;
         }
 
         public Operacao emprestar(Usuario usuario, DateTime data)
         {
-            return categoria.emprestar(usuario, data);
+            Operacao aux = categoria.emprestar(usuario, data);
+            aux.setLivro(this);
+            return aux;
         }
     }
 }

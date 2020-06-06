@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Biblioteca
 {
-    class Digital : IEmprestavel
+    public class Digital : IEmprestavel
     {
         public Operacao emprestar(Usuario usuario, DateTime data)
         {
-            throw new NotImplementedException();
+            return new Operacao(null, data);
         }
     }
 }

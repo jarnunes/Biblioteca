@@ -6,7 +6,7 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Biblioteca
 {
-    class PosGraduacao : Usuario
+    public class PosGraduacao : Usuario
     {
         public PosGraduacao(string nome, int codUser) : base(nome, codUser) { }
 
@@ -20,6 +20,12 @@ namespace Biblioteca
         {
 
             Operacao aux = new Operacao(livro, data, data.AddDays(7));
+            Operacao teste  =  livro.emprestar(this, aux.GetDataDevolucao());
+            this.operacoes.Add(teste);
+
+
+
+
             StreamWriter emprestar = new StreamWriter(@"../../../arquivos/emprestimos.txt", true);
             emprestar.WriteLine($"{this.codUser};{aux.ToString()}");
             emprestar.Close();

@@ -11,7 +11,6 @@ namespace Biblioteca
         protected int codUser;
         protected string nome;
         protected bool situacaoUsuario;
-        protected int totalDiasSuspenso;
         protected List<Operacao> operacoes;
 
         /// <summary>
