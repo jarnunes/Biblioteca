@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Biblioteca
 {
-    class Digital : Livro
+    class Digital : IEmprestavel
     {
-        public Digital(int id, string titulo, string autor, IEmprestavel categoria) : base(id, titulo, autor, categoria)
+        public Operacao emprestar(Usuario usuario, DateTime data)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

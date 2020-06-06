@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Biblioteca
 {
-    public interface IEmprestavel
+    interface IEmprestavel
     {
         Operacao emprestar(Usuario usuario, DateTime data);
     }

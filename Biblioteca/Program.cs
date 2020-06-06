@@ -44,21 +44,18 @@ namespace Biblioteca
             } while (op == -1);
             return op;
         }
-
         public static void Emprestar()
         {
             int op = -1;
             do
             {
                 Console.Clear();
-
                 try
                 {
                     Console.Write("Informe sua matricula: ");
                     int matricula = int.Parse(Console.ReadLine());
                     Console.Write("Informe o código do livro : ");
                     int codigo = int.Parse(Console.ReadLine());
-
                 }
                 catch (FormatException erro)
                 {

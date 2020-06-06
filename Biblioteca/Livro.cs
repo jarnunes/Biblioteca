@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Biblioteca
 {
-    public class Livro
+     class Livro
     {
         protected int ID;
         protected string titulo;
