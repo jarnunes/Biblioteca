@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Biblioteca
 {
-    interface IEmprestavel
+    public interface IEmprestavel
     {
-        Operacao emprestar(Usuario usuario, DateTime data);
+        Operacao emprestar( Usuario usuario, DateTime data);
     }
 }

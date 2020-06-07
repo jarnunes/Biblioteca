@@ -9,15 +9,16 @@ namespace Biblioteca
     {
         protected int ID;
         protected string titulo;
-        protected string autor;
         protected IEmprestavel categoria;
 
-        public Livro(int iD, string titulo, string autor, IEmprestavel categoria)
+        public Livro(int iD, string titulo, int categoria)
         {
             ID = iD;
             this.titulo = titulo;
-            this.autor = autor;
-            this.categoria = categoria;
+            if (categoria.Equals(1))
+                this.categoria = new Fisico(this);
+            else if (categoria.Equals(2))
+                this.categoria = new Digital(this);
         }
         public int getCodLivro()
         {
@@ -31,7 +32,10 @@ namespace Biblioteca
 
         public Operacao emprestar(Usuario usuario, DateTime data)
         {
-            Operacao aux = categoria.emprestar(usuario, data);
+            categoria.emprestar(this, usuario, data);
+
+           Operacao aux = categoria.emprestar(usuario, data);
+
             aux.setLivro(this);
             return aux;
         }

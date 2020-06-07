@@ -29,7 +29,7 @@ namespace Biblioteca
         public abstract Operacao emprestar(Livro livro, DateTime data);
         public abstract int devolver(Livro livro, DateTime data);
         public abstract bool situacao();
-
+        public abstract void addListaOperacao(Operacao operacao);
         public string relatorio()
         {
             StringBuilder relatorio = new StringBuilder();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Biblioteca
@@ -8,6 +9,8 @@ namespace Biblioteca
 
     class Program
     {
+        static string listUser = @"..\..\..\arquivos\usuarios.txt";
+        static string listLivros = @"..\..\..\arquivos\livros.txt";
         /// <summary>
         /// Menu para mostrar ao usuário opções da biblioteca 
         /// </summary>
@@ -44,28 +47,68 @@ namespace Biblioteca
             } while (op == -1);
             return op;
         }
+        private static string[] searchUser(string matricula)
+        {
+            StreamReader aux = new StreamReader(listUser);
+            string[] us = default;
+            while (aux.EndOfStream != true)
+            {
+                us = aux.ReadLine().Split(";");
+                if (us[0].Equals(matricula))
+                {
+                    return us;
+                }
+            }
+            return default;
+        }
+        private static Livro searchBook(string codBook)
+        {
+            StreamReader aux = new StreamReader(listLivros);
+            Livro emprestar;
+            while (aux.EndOfStream != true)
+            {
+                if (aux.ReadLine().Split(";")[0].Equals(codBook))
+                {
+                    string[] livro = aux.ReadLine().Split(";");
+                    return emprestar = new Livro(int.Parse(livro[0]), livro[1], int.Parse(livro[2]));
+                }
+            }
+            return default;
+        }
         public static void Emprestar()
         {
             int op = -1;
+            Usuario user;
             do
             {
                 Console.Clear();
-                try
+                Console.Write("Código Livro: ");
+                string codigo = Console.ReadLine();
+                if (searchBook(codigo).getCodLivro() != default)
                 {
-                    Console.Write("Informe sua matricula: ");
-                    int matricula = int.Parse(Console.ReadLine());
-                    Console.Write("Informe o código do livro : ");
-                    int codigo = int.Parse(Console.ReadLine());
+                    Console.Write("MATRICULA: ");
+                    string[] usuario = searchUser(Console.ReadLine());
+                    if (usuario[2].Equals("1"))
+                    {
+                        user = new Graduacao(usuario[1], int.Parse(usuario[2]));
+                    }
+                    else if (usuario[2].Equals("2"))
+                    {
+                        user = new PosGraduacao(usuario[1], int.Parse(usuario[2]));
+                    }
+                    else if (usuario[2].Equals("3"))
+                    {
+                        user = new Professor(usuario[1], int.Parse(usuario[2]));
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERRO!");
+                        break;
+                    }
+                    user.emprestar(searchBook(codigo), DateTime.Now);
                 }
-                catch (FormatException erro)
-                {
-                    Console.WriteLine(erro.Message);
-                }
-
-
             } while (op.Equals(-1));
             Console.ReadKey();
-
         }
         public static void Devolver()
         {
@@ -137,7 +180,6 @@ namespace Biblioteca
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
-
             int op;
             do
             {

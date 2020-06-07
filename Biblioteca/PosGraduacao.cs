@@ -16,20 +16,20 @@ namespace Biblioteca
         /// <param name="livro">Objeto livro emprestado</param>
         /// <param name="data">Data do empréstimo</param>
         /// <returns>Retorna a operação realizada por este método</returns>
+
         public override Operacao emprestar(Livro livro, DateTime data)
         {
 
-            Operacao aux = new Operacao(livro, data, data.AddDays(7));
-            Operacao teste  =  livro.emprestar(this, aux.GetDataDevolucao());
+            Operacao teste = livro.emprestar(this, data.AddDays(7));
             this.operacoes.Add(teste);
 
 
 
 
             StreamWriter emprestar = new StreamWriter(@"../../../arquivos/emprestimos.txt", true);
-            emprestar.WriteLine($"{this.codUser};{aux.ToString()}");
+            emprestar.WriteLine($"{this.codUser};{teste.ToString()}");
             emprestar.Close();
-            return aux;
+            return teste;
         }
         public override int devolver(Livro livro, DateTime data)
         {
@@ -59,6 +59,11 @@ namespace Biblioteca
         public override bool situacao()
         {
             return default;
+        }
+
+        public override void addListaOperacao(Operacao operacao)
+        {
+            this.operacoes.Add(operacao);
         }
     }
 }
