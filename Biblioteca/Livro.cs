@@ -7,37 +7,54 @@ namespace Biblioteca
 {
     public class Livro
     {
+        #region Atributos
         protected int ID;
-        protected string titulo;
+        protected string _titulo;
         protected IEmprestavel categoria;
+        #endregion
+        #region Propriedades
+        public int CodigoLivro
+        {
+            get
+            {
+                return this.ID;
+            }
+            private set
+            {
+                this.ID = value;
+            }
+        }
+        public string Titulo
+        {
+            get { return this._titulo; }
+            private set { this._titulo = value; }
+        }
+        public IEmprestavel Categoria
+        {
+            get { return this.categoria; }
+            private set
+            { }
+        }
+        #endregion
 
+        #region Construtores
         public Livro(int iD, string titulo, int categoria)
         {
-            ID = iD;
-            this.titulo = titulo;
+            CodigoLivro = iD;
+            Titulo = titulo;
             if (categoria.Equals(1))
                 this.categoria = new Fisico(this);
             else if (categoria.Equals(2))
                 this.categoria = new Digital(this);
-        }
-        public int getCodLivro()
-        {
-            return this.ID;
-        }
-        public IEmprestavel getTipo()
-        {
 
-            return this.categoria;
         }
+        #endregion
 
+        #region Regras de Negócio
         public Operacao emprestar(Usuario usuario, DateTime data)
         {
-            categoria.emprestar(this, usuario, data);
-
-           Operacao aux = categoria.emprestar(usuario, data);
-
-            aux.setLivro(this);
-            return aux;
+            return categoria.emprestar(usuario, data);
         }
+        #endregion
     }
 }

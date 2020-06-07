@@ -16,32 +16,30 @@ namespace Biblioteca
         /// <param name="livro">Objeto livro emprestado</param>
         /// <param name="data">Data do empréstimo</param>
         /// <returns>Retorna a operação realizada por este método</returns>
-
         public override Operacao emprestar(Livro livro, DateTime data)
         {
-
-            Operacao teste = livro.emprestar(this, data.AddDays(7));
-            this.operacoes.Add(teste);
-
-
-
-
-            StreamWriter emprestar = new StreamWriter(@"../../../arquivos/emprestimos.txt", true);
-            emprestar.WriteLine($"{this.codUser};{teste.ToString()}");
+            Operacao aux = livro.emprestar(this, data.AddDays(totalDiasBase));
+            this.operacoes.Add(aux);
+            StreamWriter emprestar = new StreamWriter(dadosOperacoes, true);
+            emprestar.WriteLine($"{this.codUser};{livro.CodigoLivro};0;{DateTime.Now.ToString("dd/MM/yyyy")}"); //Atenção à esta linha
             emprestar.Close();
-            return teste;
+            return aux;
+        }
+        public void proximaRetirada(DateTime data)
+        {
+            //Uma opção verificar o total de livros que estão no vet situação 
+            //além disso, verificar também a data de entrega do primeiro livro
         }
         public override int devolver(Livro livro, DateTime data)
         {
-            StreamWriter empresti_dev = new StreamWriter(@"../../../arquivos/relatorio.txt", true);
-
+            StreamWriter empresti_dev = new StreamWriter(dadosOperacoes, true);
             foreach (Operacao p in operacoes)
             {
-                if (p.GetLivro().Equals(livro))
+                if (p.Livro.Equals(livro))
                 {
-                    empresti_dev.WriteLine($"{this.codUser};{livro.getCodLivro()};1;{data}");
+                    empresti_dev.WriteLine($"{this.codUser};{livro.CodigoLivro};1;{data}");
                     operacoes.Remove(p);
-                    TimeSpan aux = DateTime.Now.Subtract(p.GetDataDevolucao());
+                    TimeSpan aux = DateTime.Now.Subtract(p.Devolucao);
                     if (aux.TotalDays >= 0)
                         this.situacaoUsuario = true;
                     else
@@ -61,9 +59,5 @@ namespace Biblioteca
             return default;
         }
 
-        public override void addListaOperacao(Operacao operacao)
-        {
-            this.operacoes.Add(operacao);
-        }
     }
 }

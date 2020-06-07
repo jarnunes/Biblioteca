@@ -6,14 +6,15 @@ namespace Biblioteca
 {
     public class Digital : IEmprestavel
     {
-        private Livro lvr;
+        private Livro livroDigital;
         public Digital(Livro lvr)
         {
-            this.lvr = lvr;
+            this.livroDigital = lvr;
         }
+        
         public Operacao emprestar(Usuario usuario, DateTime data)
         {
-            return new Operacao(null, data);
+            return new Operacao(livroDigital, DateTime.Now);
         }
     }
 }

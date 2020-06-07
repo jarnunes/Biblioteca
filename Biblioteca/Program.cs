@@ -9,8 +9,8 @@ namespace Biblioteca
 
     class Program
     {
-        static string listUser = @"..\..\..\arquivos\usuarios.txt";
-        static string listLivros = @"..\..\..\arquivos\livros.txt";
+        static string listUser = @"..\..\..\arquivos\dadosUsuariosPOO.txt";
+        static string listLivros = @"..\..\..\arquivos\dadosLivrosPOO.txt";
         /// <summary>
         /// Menu para mostrar ao usuário opções da biblioteca 
         /// </summary>
@@ -84,21 +84,21 @@ namespace Biblioteca
                 Console.Clear();
                 Console.Write("Código Livro: ");
                 string codigo = Console.ReadLine();
-                if (searchBook(codigo).getCodLivro() != default)
+                if (searchBook(codigo).CodigoLivro != default)
                 {
                     Console.Write("MATRICULA: ");
                     string[] usuario = searchUser(Console.ReadLine());
-                    if (usuario[2].Equals("1"))
+                    if (usuario[2].Equals("0"))
                     {
-                        user = new Graduacao(usuario[1], int.Parse(usuario[2]));
+                        user = new Graduacao(usuario[1], int.Parse(usuario[0]));
+                    }
+                    else if (usuario[2].Equals("1"))
+                    {
+                        user = new PosGraduacao(usuario[1], int.Parse(usuario[0]));
                     }
                     else if (usuario[2].Equals("2"))
                     {
-                        user = new PosGraduacao(usuario[1], int.Parse(usuario[2]));
-                    }
-                    else if (usuario[2].Equals("3"))
-                    {
-                        user = new Professor(usuario[1], int.Parse(usuario[2]));
+                        user = new Professor(usuario[1], int.Parse(usuario[0]));
                     }
                     else
                     {
@@ -144,7 +144,7 @@ namespace Biblioteca
             StreamReader livros = null;
             try
             {
-                livros = new StreamReader(@"../../../arquivos/livros.txt");
+                livros = new StreamReader(listLivros);
                 while (livros.EndOfStream != true)
                 {
                     aux = livros.ReadLine().Split(";");
