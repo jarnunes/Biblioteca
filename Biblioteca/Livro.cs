@@ -42,9 +42,9 @@ namespace Biblioteca
         {
             CodigoLivro = iD;
             Titulo = titulo;
-            if (categoria.Equals(1))
+            if (categoria.Equals(0))
                 this.categoria = new Fisico(this);
-            else if (categoria.Equals(2))
+            else if (categoria.Equals(1))
                 this.categoria = new Digital(this);
 
         }

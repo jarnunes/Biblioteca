@@ -6,7 +6,7 @@ namespace Biblioteca
 {
     class Graduacao : Usuario
     {
-        public Graduacao(string nome, int codUser) : base(nome, codUser)
+        public Graduacao(string nome, int codUser, int tipo) : base(nome, codUser, tipo)
         {
         }
 
@@ -16,6 +16,16 @@ namespace Biblioteca
         }
 
         public override Operacao emprestar(Livro livro, DateTime data)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override int getCodUser()
+        {
+            return this.codUser;
+        }
+
+        public override string getLivrosEmprestados()
         {
             throw new NotImplementedException();
         }

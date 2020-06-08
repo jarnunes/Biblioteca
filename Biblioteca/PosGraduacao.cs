@@ -6,9 +6,13 @@ using System.Runtime.Intrinsics.X86;
 
 namespace Biblioteca
 {
+    /// <summary>
+    /// Classe Pos-Graduacao. Especialicação da classe usuário
+    /// </summary>
     public class PosGraduacao : Usuario
     {
-        public PosGraduacao(string nome, int codUser) : base(nome, codUser) { }
+        private const int maxLivros = 7;
+        public PosGraduacao(string nome, int codUser, int tipo) : base(nome, codUser, tipo) { }
 
         /// <summary>
         /// Método para empréstimos de livros para alunos de Pos-Graduação
@@ -18,36 +22,59 @@ namespace Biblioteca
         /// <returns>Retorna a operação realizada por este método</returns>
         public override Operacao emprestar(Livro livro, DateTime data)
         {
-            Operacao aux = livro.emprestar(this, data.AddDays(totalDiasBase));
-            this.operacoes.Add(aux);
-            StreamWriter emprestar = new StreamWriter(dadosOperacoes, true);
-            emprestar.WriteLine($"{this.codUser};{livro.CodigoLivro};0;{DateTime.Now.ToString("dd/MM/yyyy")}"); //Atenção à esta linha
-            emprestar.Close();
+            Operacao aux = default;
+            if (situacao())
+            {
+                aux = livro.emprestar(this, data.AddDays(totalDiasBase));
+                this.operacoes.Add(aux);
+                this.emprestimos.Add(aux);
+                StreamWriter emprestar = new StreamWriter(dadosOperacoes, true);
+                emprestar.WriteLine($"{this.codUser};{livro.CodigoLivro};0;{DateTime.Now.ToString("dd/MM/yyyy")}");
+                emprestar.Close();
+            }
             return aux;
         }
-        public void proximaRetirada(DateTime data)
+        public void proximaRetirada(Operacao p, DateTime data)
         {
             //Uma opção verificar o total de livros que estão no vet situação 
             //além disso, verificar também a data de entrega do primeiro livro
+
+            TimeSpan aux = DateTime.Now.Subtract(p.Devolucao);
+            if (aux.TotalDays >= 0)
+                this.situacaoUsuario = true;
+            else
+                this.situacaoUsuario = false;
         }
+        /// <summary>
+        /// Método para devolver livros dos alunos de Pos-Graduação
+        /// </summary>
+        /// <param name="livro">Recebe o livro que sera devolvido</param>
+        /// <param name="data">Data em que o livro foi entregue</param>
+        /// <returns></returns>
         public override int devolver(Livro livro, DateTime data)
         {
             StreamWriter empresti_dev = new StreamWriter(dadosOperacoes, true);
-            foreach (Operacao p in operacoes)
+            TimeSpan aux = default;
+            foreach (Operacao p in this.emprestimos)
             {
                 if (p.Livro.Equals(livro))
                 {
                     empresti_dev.WriteLine($"{this.codUser};{livro.CodigoLivro};1;{data}");
-                    operacoes.Remove(p);
-                    TimeSpan aux = DateTime.Now.Subtract(p.Devolucao);
+                    aux = DateTime.Now.Subtract(p.Devolucao);
+
                     if (aux.TotalDays >= 0)
-                        this.situacaoUsuario = true;
-                    else
+                    {
+                        p.ProximaRetirada = DateTime.Now.AddDays(aux.TotalDays * 2);
                         this.situacaoUsuario = false;
+                    }
+                    else
+                        this.situacaoUsuario = true;
+                    this.operacoes.Add(p);
+                    this.emprestimos.Remove(p);
                 }
             }
             empresti_dev.Close();
-            return 0;
+            return (int)(aux.TotalDays);
         }
 
         /// <summary>
@@ -56,8 +83,26 @@ namespace Biblioteca
         /// <returns>retorna true caso não tenha livros em atraso, e false caso esteja em atraso.</returns>
         public override bool situacao()
         {
-            return default;
+            if (this.emprestimos.Count < maxLivros)
+                return true;
+            else
+                return false;
         }
 
+        public override string getLivrosEmprestados()
+        {
+            StringBuilder livros = new StringBuilder();
+            foreach (Operacao item in this.emprestimos)
+            {
+                livros.AppendLine(item.ToString());
+                livros.AppendLine();
+            }
+            return livros.ToString();
+        }
+
+        public override int getCodUser()
+        {
+            return this.codUser;
+        }
     }
 }

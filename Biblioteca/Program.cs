@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Biblioteca
 {
 
-    class Program
+    public class Program
     {
         static string listUser = @"..\..\..\arquivos\dadosUsuariosPOO.txt";
         static string listLivros = @"..\..\..\arquivos\dadosLivrosPOO.txt";
@@ -15,6 +17,35 @@ namespace Biblioteca
         /// Menu para mostrar ao usuário opções da biblioteca 
         /// </summary>
         /// <returns>retorna inteiro com opção escolhida</returns>
+        public static List<Usuario> getUsuarios()
+        {
+            List<Usuario> usuarios = new List<Usuario>();
+            StreamReader arquivo = new StreamReader(listUser);
+            Usuario novo = default;
+            string[] linha;
+            while (arquivo.EndOfStream != true)
+            {
+                linha = arquivo.ReadLine().Split(";");
+                if (linha[2].Equals("0"))
+                {
+                    novo = new Graduacao(linha[1], int.Parse(linha[0]), int.Parse(linha[2]));
+                    usuarios.Add(novo);
+                }
+                else if (linha[2].Equals("1"))
+                {
+                    novo = new PosGraduacao(linha[1], int.Parse(linha[0]), int.Parse(linha[2]));
+                    usuarios.Add(novo);
+                }
+                else if (linha[2].Equals("2"))
+                {
+                    novo = new Professor(linha[1], int.Parse(linha[0]), int.Parse(linha[2]));
+                    usuarios.Add(novo);
+                }
+
+            }
+            arquivo.Close();
+            return usuarios;
+        }
         public static int Menu()
         {
             int op = -1;
@@ -47,19 +78,15 @@ namespace Biblioteca
             } while (op == -1);
             return op;
         }
-        private static string[] searchUser(string matricula)
+        private static Usuario searchUser(List<Usuario> usuarios, int matricula)
         {
-            StreamReader aux = new StreamReader(listUser);
-            string[] us = default;
-            while (aux.EndOfStream != true)
+            Usuario quem = default;
+            foreach (Usuario p in usuarios)
             {
-                us = aux.ReadLine().Split(";");
-                if (us[0].Equals(matricula))
-                {
-                    return us;
-                }
+                quem = usuarios.Find(p => p.getCodUser() == matricula);
+                return quem;
             }
-            return default;
+            return quem;
         }
         private static Livro searchBook(string codBook)
         {
@@ -75,63 +102,110 @@ namespace Biblioteca
             }
             return default;
         }
-        public static void Emprestar()
+        public static Usuario Emprestar(List<Usuario> user)
         {
             int op = -1;
-            Usuario user;
+            Usuario aux = default;
             do
             {
                 Console.Clear();
-                Console.Write("Código Livro: ");
-                string codigo = Console.ReadLine();
-                if (searchBook(codigo).CodigoLivro != default)
+                Console.Write("MATRICULA: ");
+                int matricula = int.Parse(Console.ReadLine());
+                if (searchUser(user, matricula) != default)
                 {
-                    Console.Write("MATRICULA: ");
-                    string[] usuario = searchUser(Console.ReadLine());
-                    if (usuario[2].Equals("0"))
+                    Console.Write("Código Livro: ");
+                    string codigo = Console.ReadLine();
+                    if (searchBook(codigo).CodigoLivro != default)
                     {
-                        user = new Graduacao(usuario[1], int.Parse(usuario[0]));
-                    }
-                    else if (usuario[2].Equals("1"))
-                    {
-                        user = new PosGraduacao(usuario[1], int.Parse(usuario[0]));
-                    }
-                    else if (usuario[2].Equals("2"))
-                    {
-                        user = new Professor(usuario[1], int.Parse(usuario[0]));
+                        aux = searchUser(user, matricula);
+                        Console.WriteLine(aux.emprestar(searchBook(codigo), DateTime.Now).ToString());
                     }
                     else
                     {
-                        Console.WriteLine("ERRO!");
-                        break;
+                        Console.WriteLine("ERRO! Usuário inexistente.");
                     }
-                    user.emprestar(searchBook(codigo), DateTime.Now);
+                    do
+                    {
+                        Console.WriteLine("Deseja realizar outra operação?");
+                        Console.WriteLine("DIGITE:\n\t1 - para sim\n\t2 - para não");
+
+                        if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out op) && op >= 1 && op <= 2)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine("ERRO! Digite um valor válido!");
+                        }
+
+                    } while (op != 1 && op != 2);
                 }
-            } while (op.Equals(-1));
-            Console.ReadKey();
+            } while (op != 2);
+            return aux;
         }
-        public static void Devolver()
+        public static void Devolver(List<Usuario> user)
         {
-            Console.Clear();
             int op = -1;
+            Usuario aux = default;
             do
             {
-
-                try
+                Console.Clear();
+                Console.Write("MATRICULA: ");
+                int matricula = int.Parse(Console.ReadLine());
+                if (searchUser(user, matricula) != default && searchUser(user, matricula).getLivrosEmprestados() != null)
                 {
-                    Console.Write("Digite o código do livro: ");
-                    int cod = int.Parse(Console.ReadLine());
+                    Console.Write("Código Livro: ");
+                    string codigo = Console.ReadLine();
+                    if (searchBook(codigo).CodigoLivro != default)
+                    {
 
+                        aux = searchUser(user, matricula);
+                        Console.WriteLine($"O livro foi entregue{ aux.devolver(searchBook(codigo), DateTime.Now)} dias atrasado");
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("ERRO! Usuário inexistente.");
+                    }
+                    do
+                    {
+                        Console.WriteLine("Deseja realizar outra operação?");
+                        Console.WriteLine("DIGITE:\n\t1 - para sim\n\t2 - para não");
+
+                        if (int.TryParse(Console.ReadKey().KeyChar.ToString(), out op) && op >= 1 && op <= 2)
+                        {
+                            break;
+                        }
+                        else
+                        {
+
+                            Console.WriteLine("ERRO! Digite um valor válido!");
+                        }
+
+                    } while (op != 1 && op != 2);
                 }
-                catch (FormatException erro)
-                {
-                    Console.WriteLine(erro.Message);
-                }
-            } while (op == -1);
+            } while (op != 2);
 
         }
         public static void Situacao() { }
-        public static void LivrosEmprestados() { }
+        public static void LivrosEmprestados(List<Usuario> user)
+        {
+            Console.Clear();
+
+            Usuario aux = default;
+            int op = -1;
+
+                Console.Write("MATRICULA: ");
+                int matricula = int.Parse(Console.ReadLine());
+                if (searchUser(user, matricula) != default)
+                {
+                    aux = searchUser(user, matricula);
+                    Console.WriteLine(aux.getLivrosEmprestados());
+                }
+
+
+            Console.ReadKey();
+        }
         /// <summary>
         /// Método para ler um arquivo com a lista de livros e listar todos os livros da biblioteca.
         /// </summary>
@@ -150,9 +224,17 @@ namespace Biblioteca
                     aux = livros.ReadLine().Split(";");
                     for (int i = 0; i < aux.Length; i++)
                     {
-                        Console.WriteLine($"{descricao[i]} : {aux[i]}");
+                        if (aux[i].Contains(","))
+                        {
+                            string[] subString = aux[1].Split(",");
+                            aux[1] = subString[1] + " " + subString[0];
+                            Console.WriteLine($"{descricao[i]} : {aux[i]}");
+                        }
+                        else
+                            Console.WriteLine($"{descricao[i]} : {aux[i]}");
                     }
                     Console.WriteLine("\n-----------------\n");
+                    aux.Initialize();
                 }
             }
             catch (Exception erro)
@@ -180,6 +262,7 @@ namespace Biblioteca
         /// <param name="args"></param>
         public static void Main(string[] args)
         {
+            List<Usuario> user = getUsuarios();
             int op;
             do
             {
@@ -188,16 +271,17 @@ namespace Biblioteca
                 switch (op)
                 {
                     case 1:
-                        Emprestar();
+                        Emprestar(user);
                         break;
                     case 2:
-                        Devolver();
+                        Devolver(user);
                         break;
                     case 3:
                         Situacao();
                         break;
                     case 4:
-                        LivrosEmprestados();
+                        LivrosEmprestados(user);
+                        Console.ReadKey();
                         break;
                     case 5:
                         Acervo();

@@ -25,7 +25,7 @@ namespace Biblioteca
         public DateTime ProximaRetirada
         {
             get { return this.prox_retirada; }
-            private set { this.prox_retirada = value; }
+            set { this.prox_retirada = value; }
         }
         public Livro Livro
         {
@@ -38,11 +38,11 @@ namespace Biblioteca
         }
         #endregion
         #region Construtores
-        private void Init(Livro livro, DateTime devolucao)
+        private void Init(Livro livro, DateTime data)
         {
             this.Livro = livro;
             this.Retirada = DateTime.Now;
-            this.Devolucao = devolucao;
+            this.Devolucao = data;
         }
 
         public Operacao(Livro livro, DateTime retirada)
@@ -51,10 +51,14 @@ namespace Biblioteca
         }
         #endregion
         #region Regras de Negócio
+
         public override string ToString()
         {
             StringBuilder escrever = new StringBuilder();
-            escrever.AppendLine($"{Livro.CodigoLivro};{Livro.Categoria.ToString()};{this.Retirada}");
+            escrever.AppendLine($"Código Livro: {Livro.CodigoLivro}");
+            escrever.AppendLine($"Categoria: {Livro.Categoria.ToString()}");
+            escrever.AppendLine($"Data retirada: {this.Retirada}");
+            escrever.AppendLine($"Data Devolucao: {this.Devolucao}");
             return escrever.ToString();
         }
         #endregion

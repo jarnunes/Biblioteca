@@ -11,10 +11,10 @@ namespace Biblioteca
         {
             this.livroDigital = lvr;
         }
-        
+
         public Operacao emprestar(Usuario usuario, DateTime data)
         {
-            return new Operacao(livroDigital, DateTime.Now);
+            return new Operacao(livroDigital, default);
         }
     }
 }
