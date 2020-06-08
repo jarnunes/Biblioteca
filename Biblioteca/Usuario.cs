@@ -48,6 +48,7 @@ namespace Biblioteca
         public abstract bool situacao();
         public string relatorio()
         {
+            
             StringBuilder relatorio = new StringBuilder();
             foreach (Operacao aux in this.operacoes)
             {
