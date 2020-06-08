@@ -27,7 +27,8 @@ namespace Biblioteca
             {
                 aux = livro.emprestar(this, data.AddDays(totalDiasBase));
                 this.operacoes.Add(aux);
-                this.emprestimos.Add(aux);
+                if (aux.Devolucao != default)
+                    this.emprestimos.Add(aux);
                 StreamWriter emprestar = new StreamWriter(dadosOperacoes, true);
                 emprestar.WriteLine($"{this.codUser};{livro.CodigoLivro};0;{DateTime.Now.ToString("dd/MM/yyyy")}");
                 emprestar.Close();
@@ -100,9 +101,5 @@ namespace Biblioteca
             return livros.ToString();
         }
 
-        public override int getCodUser()
-        {
-            return this.codUser;
-        }
     }
 }

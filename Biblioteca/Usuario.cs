@@ -12,6 +12,11 @@ namespace Biblioteca
         #region Atritubos
         protected static string dadosOperacoes = @"..\..\..\arquivos\dadosOperacoesBibPOO.txt";
         protected int codUser;
+        public int CodUser
+        {
+            get { return this.codUser; }
+            private set { }
+        }
         protected string nome;
         protected int tipo;
         protected bool situacaoUsuario;
@@ -53,7 +58,6 @@ namespace Biblioteca
             return relatorio.ToString();
         }
         public abstract string getLivrosEmprestados();
-        public abstract int getCodUser();
         #endregion
     }
 }

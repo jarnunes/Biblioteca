@@ -83,7 +83,7 @@ namespace Biblioteca
             Usuario quem = default;
             foreach (Usuario p in usuarios)
             {
-                quem = usuarios.Find(p => p.getCodUser() == matricula);
+                quem = usuarios.Find(p => p.CodUser == matricula);
                 return quem;
             }
             return quem;
@@ -193,7 +193,6 @@ namespace Biblioteca
             Console.Clear();
 
             Usuario aux = default;
-            int op = -1;
 
                 Console.Write("MATRICULA: ");
                 int matricula = int.Parse(Console.ReadLine());

@@ -20,10 +20,6 @@ namespace Biblioteca
             throw new NotImplementedException();
         }
 
-        public override int getCodUser()
-        {
-            return this.codUser;
-        }
 
         public override string getLivrosEmprestados()
         {
