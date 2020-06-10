@@ -41,7 +41,6 @@ namespace Biblioteca
                     novo = new Professor(linha[1], int.Parse(linha[0]), int.Parse(linha[2]));
                     usuarios.Add(novo);
                 }
-
             }
             arquivo.Close();
             return usuarios;
@@ -294,6 +293,5 @@ namespace Biblioteca
                 }
             } while (op != 0);
         }
-
     }
 }
