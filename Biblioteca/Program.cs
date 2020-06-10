@@ -60,20 +60,12 @@ namespace Biblioteca
                 Console.WriteLine("5 - Acervo");
                 Console.WriteLine("6 - Relatório");
                 Console.WriteLine("0 - Sair");
-                try
-                {
-                    op = int.Parse(Console.ReadKey().KeyChar.ToString());
-                }
-                catch (FormatException erro)
-                {
-                    Console.WriteLine("Formato inválido");
-                    Console.WriteLine(erro.Message);
-                }
-                finally
-                {
-                    if (op < 0 && op > 6)
-                        op = -1;
-                }
+
+                op = int.Parse(Console.ReadKey().KeyChar.ToString());
+
+                if (op < 0 && op > 6)
+                    op = -1;
+
             } while (op == -1);
             return op;
         }
@@ -119,10 +111,7 @@ namespace Biblioteca
                         aux = searchUser(user, matricula);
                         Console.WriteLine(aux.emprestar(searchBook(codigo), DateTime.Now).ToString());
                     }
-                    else
-                    {
-                        Console.WriteLine("ERRO! Usuário inexistente.");
-                    }
+
                     do
                     {
                         Console.WriteLine("Deseja realizar outra operação?");
@@ -134,9 +123,10 @@ namespace Biblioteca
                         }
                         else
                         {
-                            Console.WriteLine("ERRO! Digite um valor válido!");
+                            Console.WriteLine("\nERRO! Digite um valor válido!");
+                            Console.ReadKey();
+                            Console.Clear();
                         }
-
                     } while (op != 1 && op != 2);
                 }
             } while (op != 2);
@@ -157,15 +147,10 @@ namespace Biblioteca
                     string codigo = Console.ReadLine();
                     if (searchBook(codigo).CodigoLivro != default)
                     {
-
                         aux = searchUser(user, matricula);
-                        Console.WriteLine($"O livro foi entregue{ aux.devolver(searchBook(codigo), DateTime.Now)} dias atrasado");
+                        Console.WriteLine($"O livro foi entregue {aux.devolver(searchBook(codigo), DateTime.Now)} dias atrasado");
+                    }
 
-                    }
-                    else
-                    {
-                        Console.WriteLine("ERRO! Usuário inexistente.");
-                    }
                     do
                     {
                         Console.WriteLine("Deseja realizar outra operação?");
@@ -177,8 +162,9 @@ namespace Biblioteca
                         }
                         else
                         {
-
-                            Console.WriteLine("ERRO! Digite um valor válido!");
+                            Console.WriteLine("\nERRO! Digite um valor válido!");
+                            Console.ReadKey();
+                            Console.Clear();
                         }
 
                     } while (op != 1 && op != 2);
@@ -193,13 +179,13 @@ namespace Biblioteca
 
             Usuario aux = default;
 
-                Console.Write("MATRICULA: ");
-                int matricula = int.Parse(Console.ReadLine());
-                if (searchUser(user, matricula) != default)
-                {
-                    aux = searchUser(user, matricula);
-                    Console.WriteLine(aux.getLivrosEmprestados());
-                }
+            Console.Write("MATRICULA: ");
+            int matricula = int.Parse(Console.ReadLine());
+            if (searchUser(user, matricula) != default)
+            {
+                aux = searchUser(user, matricula);
+                Console.WriteLine(aux.getLivrosEmprestados());
+            }
 
 
             Console.ReadKey();
@@ -214,37 +200,29 @@ namespace Biblioteca
             string[] aux;
             string[] descricao = { "Código", "Título", "Categoria" };
             StreamReader livros = null;
-            try
+
+            livros = new StreamReader(listLivros);
+            while (livros.EndOfStream != true)
             {
-                livros = new StreamReader(listLivros);
-                while (livros.EndOfStream != true)
+                aux = livros.ReadLine().Split(";");
+                for (int i = 0; i < aux.Length; i++)
                 {
-                    aux = livros.ReadLine().Split(";");
-                    for (int i = 0; i < aux.Length; i++)
+                    if (aux[i].Contains(","))
                     {
-                        if (aux[i].Contains(","))
-                        {
-                            string[] subString = aux[1].Split(",");
-                            aux[1] = subString[1] + " " + subString[0];
-                            Console.WriteLine($"{descricao[i]} : {aux[i]}");
-                        }
-                        else
-                            Console.WriteLine($"{descricao[i]} : {aux[i]}");
+                        string[] subString = aux[1].Split(",");
+                        aux[1] = subString[1] + " " + subString[0];
+                        Console.WriteLine($"{descricao[i]} : {aux[i]}");
                     }
-                    Console.WriteLine("\n-----------------\n");
-                    aux.Initialize();
+                    else
+                        Console.WriteLine($"{descricao[i]} : {aux[i]}");
                 }
+                Console.WriteLine("\n-----------------\n");
+                aux.Initialize();
             }
-            catch (Exception erro)
-            {
-                Console.WriteLine(erro.Message);
-            }
-            finally
-            {
-                livros.Close();
-                Console.WriteLine("Pressione Enter para sair!");
-                Console.ReadKey();
-            }
+
+            livros.Close();
+            Console.WriteLine("Pressione Enter para voltar ao Menu inicial");
+            Console.ReadKey();
         }
         /// <summary>
         /// Método para mostrar relatório com todos os livros já emprestados de um determinado usuário incluindo se foram entregues
@@ -261,35 +239,51 @@ namespace Biblioteca
         public static void Main(string[] args)
         {
             List<Usuario> user = getUsuarios();
-            int op;
+            int op = 0;
             do
             {
-                op = Menu();
-
-                switch (op)
+                try
                 {
-                    case 1:
-                        Emprestar(user);
-                        break;
-                    case 2:
-                        Devolver(user);
-                        break;
-                    case 3:
-                        Situacao();
-                        break;
-                    case 4:
-                        LivrosEmprestados(user);
-                        Console.ReadKey();
-                        break;
-                    case 5:
-                        Acervo();
-                        break;
-                    case 6:
-                        Relatorio();
-                        break;
-                    default:
-                        Console.WriteLine("Até a próxima!");
-                        break;
+                    op = Menu();
+
+                    switch (op)
+                    {
+                        case 1:
+                            Emprestar(user);
+                            break;
+                        case 2:
+                            Devolver(user);
+                            break;
+                        case 3:
+                            Situacao();
+                            break;
+                        case 4:
+                            LivrosEmprestados(user);
+                            Console.ReadKey();
+                            break;
+                        case 5:
+                            Acervo();
+                            break;
+                        case 6:
+                            Relatorio();
+                            break;
+                        case 0:
+                            Console.WriteLine("\nAté a próxima!");
+                            Console.ReadKey();
+                            break;
+                    }
+                }
+                catch (FormatException fEx)
+                {
+                    Console.WriteLine("Usuário não encontrado"!);
+                    Console.WriteLine(fEx.Message);
+                    Console.ReadKey();
+                }
+                catch (NullReferenceException nREx)
+                {
+                    Console.WriteLine("Código inválido!");
+                    Console.WriteLine(nREx.Message);
+                    Console.ReadKey();
                 }
             } while (op != 0);
         }
