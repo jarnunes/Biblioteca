@@ -11,6 +11,7 @@ namespace Biblioteca
 
     public class Program
     {
+        //alteração kk
         static string listUser = @"..\..\..\arquivos\dadosUsuariosPOO.txt";
         static string listLivros = @"..\..\..\arquivos\dadosLivrosPOO.txt";
         /// <summary>
@@ -146,7 +147,6 @@ namespace Biblioteca
                 {
                     Console.Write("Código Livro: ");
                     string codigo = Console.ReadLine();
-                    if (searchBook(codigo).CodigoLivro != default)
                     {
                         aux = searchUser(user, matricula);
                         Console.WriteLine($"O livro foi entregue {aux.devolver(searchBook(codigo), DateTime.Now)} dias atrasado");
@@ -176,6 +176,7 @@ namespace Biblioteca
         public static void Situacao() { }
         public static void LivrosEmprestados(List<Usuario> user)
         {
+
             Console.Clear();
 
             Usuario aux = default;
