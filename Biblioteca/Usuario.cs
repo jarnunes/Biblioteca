@@ -23,6 +23,7 @@ namespace Biblioteca
         protected List<Operacao> operacoes;
         protected List<Operacao> emprestimos;
         protected const int totalDiasBase = 7;
+        protected int maxLivros;
         #endregion
 
         #region Construtores

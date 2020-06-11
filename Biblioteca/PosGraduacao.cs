@@ -12,8 +12,10 @@ namespace Biblioteca
     /// </summary>
     public class PosGraduacao : Usuario
     {
-        private const int maxLivros = 3;
-        public PosGraduacao(string nome, int codUser, int tipo) : base(nome, codUser, tipo) { }
+        public PosGraduacao(string nome, int codUser, int tipo) : base(nome, codUser, tipo)
+        {
+            this.maxLivros = 7;
+        }
 
         /// <summary>
         /// Método para empréstimos de livros para alunos de Pos-Graduação
