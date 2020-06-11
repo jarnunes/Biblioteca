@@ -38,7 +38,7 @@ namespace Biblioteca
             this.nome = nome;
             this.codUser = codUser;
             this.tipo = tipo;
-            operacoes = new List<Operacao>();
+            this.operacoes = new List<Operacao>();
             emprestimos = new List<Operacao>();
         }
         #endregion
@@ -47,9 +47,10 @@ namespace Biblioteca
         public abstract Operacao emprestar(Livro livro, DateTime data);
         public abstract int devolver(Livro livro, DateTime data);
         public abstract bool situacao();
+        public abstract bool situacao(Livro livro);
         public string relatorio()
         {
-            
+
             StringBuilder relatorio = new StringBuilder();
             foreach (Operacao aux in this.operacoes)
             {
@@ -60,6 +61,7 @@ namespace Biblioteca
             return relatorio.ToString();
         }
         public abstract string getLivrosEmprestados();
+        public abstract string getOperacoes();
         #endregion
     }
 }

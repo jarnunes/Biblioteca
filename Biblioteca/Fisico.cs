@@ -15,5 +15,9 @@ namespace Biblioteca
         {
             return new Operacao(this.livroFisico, data);
         }
+        public override string ToString()
+        {
+            return "Fisico";
+        }
     }
 }

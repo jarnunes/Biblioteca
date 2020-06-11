@@ -38,28 +38,48 @@ namespace Biblioteca
         }
         #endregion
         #region Construtores
-        private void Init(Livro livro, DateTime data)
+        public Operacao(Livro livro, DateTime data, int tipo)
+        {
+            if (tipo.Equals(0))
+            {
+                this.Livro = livro;
+                this.Retirada = data;
+            }
+            else
+            {
+                this.Livro = livro;
+                this.Devolucao = data;
+            }
+
+        }
+        public Operacao(Livro livro, DateTime data)
         {
             this.Livro = livro;
-            this.Retirada = DateTime.Now;
-            this.Devolucao = data;
-        }
-
-        public Operacao(Livro livro, DateTime retirada)
-        {
-            Init(livro, retirada);
+            this.Retirada = data;
         }
         #endregion
         #region Regras de Negócio
-
         public override string ToString()
         {
             StringBuilder escrever = new StringBuilder();
-            escrever.AppendLine("LIVRO EMPRESTADO: \n");
-            escrever.AppendLine($"Código Livro: {Livro.CodigoLivro}");
-            escrever.AppendLine($"Categoria: {Livro.Categoria.ToString()}");
-            escrever.AppendLine($"Data retirada: {this.Retirada.ToString("dd/MM/yyyy")}");
-            escrever.AppendLine($"Data Devolucao: {this.Devolucao.ToString("dd/MM/yyyy")}");
+            StringBuilder dadosLivro = new StringBuilder();
+
+            dadosLivro.AppendLine($"Título: {Livro.Titulo}");
+            dadosLivro.AppendLine($"Código Livro: {Livro.CodigoLivro}");
+            dadosLivro.AppendLine($"Categoria: {Livro.Categoria.ToString()}");
+            dadosLivro.AppendLine($"Data retirada: {this.Retirada.ToString("dd/MM/yyyy")}");
+            dadosLivro.AppendLine($"Data Devolucao: {this.Devolucao.ToString("dd/MM/yyyy")}");
+
+            if (Livro.Categoria.ToString().Equals("Digital"))
+            {
+                escrever.AppendLine("LIVRO CONSULTADO: \n");
+                escrever.AppendLine(dadosLivro.ToString());
+            }
+            else
+            {
+                escrever.AppendLine("LIVRO EMPRESTADO: \n");
+                escrever.AppendLine(dadosLivro.ToString());
+            }
             return escrever.ToString();
         }
         #endregion

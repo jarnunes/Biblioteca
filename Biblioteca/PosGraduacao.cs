@@ -12,21 +12,26 @@ namespace Biblioteca
     /// </summary>
     public class PosGraduacao : Usuario
     {
+        /// <summary>
+        /// Construtor da classe PosGraduacao
+        /// </summary>
+        /// <param name="nome">Nome do usuario</param>
+        /// <param name="codUser">Matricula usuario</param>
+        /// <param name="tipo">int com o tipo do usuario</param>
         public PosGraduacao(string nome, int codUser, int tipo) : base(nome, codUser, tipo)
         {
             this.maxLivros = 7;
         }
-
         /// <summary>
         /// Método para empréstimos de livros para alunos de Pos-Graduação
         /// </summary>
         /// <param name="livro">Objeto livro emprestado</param>
         /// <param name="data">Data do empréstimo</param>
-        /// <returns>Retorna a operação realizada por este método</returns>
+        /// <returns>Retorna a operação realizada </returns>
         public override Operacao emprestar(Livro livro, DateTime data)
         {
             Operacao aux = default;
-            if (situacao())
+            if (situacao() && situacao(livro))
             {
                 aux = livro.emprestar(this, data.AddDays(totalDiasBase));
                 this.operacoes.Add(aux);
@@ -38,7 +43,6 @@ namespace Biblioteca
             }
             return aux;
         }
-
         /// <summary>
         /// Método para devolver livros dos alunos de Pos-Graduação
         /// </summary>
@@ -70,11 +74,32 @@ namespace Biblioteca
             empresti_dev.Close();
             return (int)(aux.TotalDays);
         }
-
         /// <summary>
         /// Método para validar a situação de um aluno
         /// </summary>
         /// <returns>retorna true caso não tenha livros em atraso, e false caso esteja em atraso.</returns>
+        public override bool situacao(Livro livro)
+        {
+            Boolean aux = false;
+            foreach (Operacao item in emprestimos)
+            {
+                if (item.Livro.Equals(livro))
+                {
+                    aux = false;
+                }
+                else
+                {
+                    aux = true;
+                }
+            }
+
+            if (this.emprestimos.Count < this.maxLivros)
+                aux = true;
+            else
+                aux = false;
+
+            return aux;
+        }
         public override bool situacao()
         {
             if (this.emprestimos.Count < maxLivros)
@@ -84,7 +109,10 @@ namespace Biblioteca
             else
                 return false;
         }
-
+        /// <summary>
+        /// Método para retornar todos os livros que estão emprestados com determinado usuário.
+        /// </summary>
+        /// <returns></returns>
         public override string getLivrosEmprestados()
         {
             StringBuilder livros = new StringBuilder();
@@ -95,6 +123,18 @@ namespace Biblioteca
             }
             return livros.ToString();
         }
-
+        public override string getOperacoes()
+        {
+            StringBuilder op = new StringBuilder();
+            foreach (Operacao item in this.operacoes)
+            {
+                if (item.Livro != null)
+                {
+                    op.AppendLine(item.ToString());
+                    op.AppendLine();
+                }
+            }
+            return op.ToString();
+        }
     }
 }

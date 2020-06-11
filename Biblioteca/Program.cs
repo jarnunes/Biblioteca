@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -11,13 +13,47 @@ namespace Biblioteca
 
     public class Program
     {
-        //alteração kk
-        static string listUser = @"..\..\..\arquivos\dadosUsuariosPOO.txt";
-        static string listLivros = @"..\..\..\arquivos\dadosLivrosPOO.txt";
+        #region Leitura de arquivos
+        private static string listUser = @"..\..\..\arquivos\dadosUsuariosPOO.txt";
+        private static string listLivros = @"..\..\..\arquivos\dadosLivrosPOO.txt";
+        private static string listOperacoes = @"..\..\..\arquivos\dadosOperacoesBibPOO.txt";
+        #endregion
+
         /// <summary>
         /// Menu para mostrar ao usuário opções da biblioteca 
         /// </summary>
         /// <returns>retorna inteiro com opção escolhida</returns>
+        public static void getOperacaos(List<Usuario> user)
+        {
+            Console.Clear();
+
+            List<Operacao> opUsuarios = new List<Operacao>();
+            StreamReader dadosOperacoes = new StreamReader(listOperacoes);
+            Operacao auxOP;
+            string[] aux;
+
+            Console.Write("MATRICULA: ");
+            int matricula = int.Parse(Console.ReadLine());
+
+            if (searchUser(user, matricula) != default)
+            {
+                while (dadosOperacoes.EndOfStream != true)
+                {
+                    aux = dadosOperacoes.ReadLine().Split(";");
+                    if (int.Parse(aux[0]).Equals(matricula))
+                    {
+                        auxOP = new Operacao(searchBook(aux[1]), DateTime.Parse(aux[3]), int.Parse(aux[2]));
+                        opUsuarios.Add(auxOP);
+                    }
+                }
+                foreach (Operacao item in opUsuarios)
+                {
+                    if (item.Livro != null)
+                        Console.WriteLine(item.ToString());
+                }
+            }
+            dadosOperacoes.Close();
+        }
         public static List<Usuario> getUsuarios()
         {
             List<Usuario> usuarios = new List<Usuario>();
@@ -39,6 +75,7 @@ namespace Biblioteca
                 }
                 else if (linha[2].Equals("2"))
                 {
+
                     novo = new Professor(linha[1], int.Parse(linha[0]), int.Parse(linha[2]));
                     usuarios.Add(novo);
                 }
@@ -46,6 +83,28 @@ namespace Biblioteca
             arquivo.Close();
             return usuarios;
         }
+        /// <summary>
+        /// Método para carregar lista de operacoes em um arraylist
+        /// </summary>
+        /// <returns></returns>
+        /*
+        private static void getOperacaos(List<Usuario> user)
+        {
+            Console.Clear();
+            Usuario aux = default;
+            Console.Write("MATRICULA: ");
+            int matricula = int.Parse(Console.ReadLine());
+            if (searchUser(user, matricula) != default)
+            {
+                aux = searchUser(user, matricula);
+                Console.WriteLine(aux.getOperacoes());
+            }
+
+        }*/
+        /// <summary>
+        /// Menu com opções para o usuario
+        /// </summary>
+        /// <returns>inteiro com opcao escolhida pelo usuario</returns>
         public static int Menu()
         {
             int op = -1;
@@ -60,16 +119,23 @@ namespace Biblioteca
                 Console.WriteLine("4 - Livros Emprestados");
                 Console.WriteLine("5 - Acervo");
                 Console.WriteLine("6 - Relatório");
+                Console.WriteLine("7 - Maior dif");
                 Console.WriteLine("0 - Sair");
 
                 op = int.Parse(Console.ReadKey().KeyChar.ToString());
 
-                if (op < 0 && op > 6)
+                if (op < 0 && op > 7)
                     op = -1;
 
             } while (op == -1);
             return op;
         }
+        /// <summary>
+        /// Método para pesquisar por um usuario na lista de usuarios
+        /// </summary>
+        /// <param name="usuarios">Lista de usuarios</param>
+        /// <param name="matricula">matricula do usuario</param>
+        /// <returns></returns>
         private static Usuario searchUser(List<Usuario> usuarios, int matricula)
         {
             Usuario quem = default;
@@ -80,6 +146,11 @@ namespace Biblioteca
             }
             return quem;
         }
+        /// <summary>
+        /// Método para pesquisar por um livro no arquivo de livros
+        /// </summary>
+        /// <param name="codBook">Código do livro a ser procurado</param>
+        /// <returns></returns>
         private static Livro searchBook(string codBook)
         {
             StreamReader aux = new StreamReader(listLivros);
@@ -92,6 +163,11 @@ namespace Biblioteca
             }
             return default;
         }
+        /// <summary>
+        /// Metodo de MENU emprestar 
+        /// </summary>
+        /// <param name="user">Lista de usuarios cadastrados na biblioteca</param>
+        /// <returns></returns>
         public static Usuario Emprestar(List<Usuario> user)
         {
             int op = -1;
@@ -111,7 +187,6 @@ namespace Biblioteca
                         aux = searchUser(user, matricula);
                         Console.WriteLine(aux.emprestar(searchBook(codigo), DateTime.Now).ToString());
                     }
-
                     do
                     {
                         Console.WriteLine("Deseja realizar outra operação?");
@@ -132,6 +207,10 @@ namespace Biblioteca
             } while (op != 2);
             return aux;
         }
+        /// <summary>
+        /// Método de MENU devolver.
+        /// </summary>
+        /// <param name="user">Lista de usuarios cadastrados na biblioteca</param>
         public static void Devolver(List<Usuario> user)
         {
             int op = -1;
@@ -171,6 +250,10 @@ namespace Biblioteca
             } while (op != 2);
 
         }
+        /// <summary>
+        /// Método de MENU para obter situação de determinado usuario
+        /// /// </summary>
+        /// <param name="user"></param>
         public static void Situacao(List<Usuario> user)
         {
             Usuario aux = default;
@@ -185,6 +268,10 @@ namespace Biblioteca
                 Console.ReadKey();
             }
         }
+        /// <summary>
+        /// Método de MENU para mostrar livros emprestados  a determinado usuario
+        /// </summary>
+        /// <param name="user"></param>
         public static void LivrosEmprestados(List<Usuario> user)
         {
 
@@ -204,7 +291,7 @@ namespace Biblioteca
             Console.ReadKey();
         }
         /// <summary>
-        /// Método para ler um arquivo com a lista de livros e listar todos os livros da biblioteca.
+        /// Método de MENU listar todos os livros da biblioteca.
         /// </summary>
         public static void Acervo()
         {
@@ -245,6 +332,7 @@ namespace Biblioteca
         {
 
         }
+
         /// <summary>
         /// Programa principal
         /// </summary>
@@ -252,7 +340,9 @@ namespace Biblioteca
         public static void Main(string[] args)
         {
             List<Usuario> user = getUsuarios();
+
             int op = 0;
+
             do
             {
                 try
@@ -280,6 +370,10 @@ namespace Biblioteca
                             break;
                         case 6:
                             Relatorio();
+                            break;
+                        case 7:
+                            getOperacaos(user);
+                            Console.ReadKey();
                             break;
                         case 0:
                             Console.WriteLine("\nAté a próxima!");

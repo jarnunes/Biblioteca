@@ -16,5 +16,10 @@ namespace Biblioteca
         {
             return new Operacao(livroDigital, default);
         }
+
+        public override string ToString()
+        {
+            return "Digital";
+        }
     }
 }

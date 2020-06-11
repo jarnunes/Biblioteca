@@ -25,7 +25,17 @@ namespace Biblioteca
             throw new NotImplementedException();
         }
 
+        public override string getOperacoes()
+        {
+            throw new NotImplementedException();
+        }
+
         public override bool situacao()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool situacao(Livro livro)
         {
             throw new NotImplementedException();
         }
