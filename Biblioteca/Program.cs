@@ -86,11 +86,9 @@ namespace Biblioteca
             Livro emprestar;
             while (aux.EndOfStream != true)
             {
-                if (aux.ReadLine().Split(";")[0].Equals(codBook))
-                {
-                    string[] livro = aux.ReadLine().Split(";");
+                string[] livro = aux.ReadLine().Split(";");
+                if (livro[0].Equals(codBook))
                     return emprestar = new Livro(int.Parse(livro[0]), livro[1], int.Parse(livro[2]));
-                }
             }
             return default;
         }
@@ -109,6 +107,7 @@ namespace Biblioteca
                     string codigo = Console.ReadLine();
                     if (searchBook(codigo).CodigoLivro != default)
                     {
+                        Console.Clear();
                         aux = searchUser(user, matricula);
                         Console.WriteLine(aux.emprestar(searchBook(codigo), DateTime.Now).ToString());
                     }
@@ -172,7 +171,20 @@ namespace Biblioteca
             } while (op != 2);
 
         }
-        public static void Situacao() { }
+        public static void Situacao(List<Usuario> user)
+        {
+            Usuario aux = default;
+            Console.Clear();
+            Console.Write("MATRICULA: ");
+            int matricula = int.Parse(Console.ReadLine());
+            if (searchUser(user, matricula) != default)
+            {
+                Console.Clear();
+                aux = searchUser(user, matricula);
+                Console.WriteLine(aux.situacao());
+                Console.ReadKey();
+            }
+        }
         public static void LivrosEmprestados(List<Usuario> user)
         {
 
@@ -256,7 +268,8 @@ namespace Biblioteca
                             Devolver(user);
                             break;
                         case 3:
-                            Situacao();
+                            Situacao(user);
+                            Console.ReadKey();
                             break;
                         case 4:
                             LivrosEmprestados(user);

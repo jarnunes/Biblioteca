@@ -55,6 +55,7 @@ namespace Biblioteca
         public override string ToString()
         {
             StringBuilder escrever = new StringBuilder();
+            escrever.AppendLine("LIVRO EMPRESTADO: \n");
             escrever.AppendLine($"Código Livro: {Livro.CodigoLivro}");
             escrever.AppendLine($"Categoria: {Livro.Categoria.ToString()}");
             escrever.AppendLine($"Data retirada: {this.Retirada.ToString("dd/MM/yyyy")}");

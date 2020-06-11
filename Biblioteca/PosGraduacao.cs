@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Runtime.Intrinsics.X86;
+using System.Runtime.CompilerServices;
 
 namespace Biblioteca
 {
@@ -11,7 +12,7 @@ namespace Biblioteca
     /// </summary>
     public class PosGraduacao : Usuario
     {
-        private const int maxLivros = 7;
+        private const int maxLivros = 3;
         public PosGraduacao(string nome, int codUser, int tipo) : base(nome, codUser, tipo) { }
 
         /// <summary>
@@ -35,17 +36,7 @@ namespace Biblioteca
             }
             return aux;
         }
-        public void proximaRetirada(Operacao p, DateTime data)
-        {
-            //Uma opção verificar o total de livros que estão no vet situação 
-            //além disso, verificar também a data de entrega do primeiro livro
 
-            TimeSpan aux = DateTime.Now.Subtract(p.Devolucao);
-            if (aux.TotalDays >= 0)
-                this.situacaoUsuario = true;
-            else
-                this.situacaoUsuario = false;
-        }
         /// <summary>
         /// Método para devolver livros dos alunos de Pos-Graduação
         /// </summary>
@@ -85,6 +76,8 @@ namespace Biblioteca
         public override bool situacao()
         {
             if (this.emprestimos.Count < maxLivros)
+                return true;
+            else if (this.situacaoUsuario)
                 return true;
             else
                 return false;
