@@ -33,7 +33,6 @@ namespace Biblioteca
             Operacao aux = default;
             if (situacao() && situacao(livro))
             {
-
                 aux = livro.emprestar(this, data.AddDays(totalDiasBase));
                 this.operacoes.Add(aux);
                 if (aux.Devolucao != default)
@@ -56,6 +55,7 @@ namespace Biblioteca
             TimeSpan aux = default;
             foreach (Operacao p in this.emprestimos)
             {
+                //O livro passado como parametro não está sendo considerado igual ao livro que está na lista de emprestados
                 if (p.Livro.Equals(livro))
                 {
                     empresti_dev.WriteLine($"{this.codUser};{livro.CodigoLivro};1;{data}");

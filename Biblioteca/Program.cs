@@ -102,7 +102,6 @@ namespace Biblioteca
                 Console.WriteLine("4 - Livros Emprestados");
                 Console.WriteLine("5 - Acervo");
                 Console.WriteLine("6 - Relatório");
-                Console.WriteLine("7 - Maior dif");
                 Console.WriteLine("0 - Sair");
 
                 op = int.Parse(Console.ReadKey().KeyChar.ToString());
@@ -137,14 +136,23 @@ namespace Biblioteca
         private static Livro searchBook(string codBook)
         {
             StreamReader aux = new StreamReader(listLivros);
-            Livro emprestar;
+            Livro emprestar = default;
             while (aux.EndOfStream != true)
             {
                 string[] livro = aux.ReadLine().Split(";");
                 if (livro[0].Equals(codBook))
-                    return emprestar = new Livro(int.Parse(livro[0]), livro[1], int.Parse(livro[2]));
+                {
+                    if (livro[1].Contains(","))
+                    {
+                        string[] substring = livro[1].Split(",");
+                        livro[1] = substring[1] + " " + substring[0];
+                    }
+
+                    emprestar = new Livro(int.Parse(livro[0]), livro[1], int.Parse(livro[2]));
+                }
             }
-            return default;
+            aux.Close();
+            return emprestar;
         }
         /// <summary>
         /// Metodo de MENU emprestar 
@@ -281,39 +289,19 @@ namespace Biblioteca
             Console.Clear();
             Console.WriteLine("==========ACERVO==========");
             string[] aux;
-            string[] descricao = { "Código", "Título", "Categoria" };
             StreamReader livros = null;
 
             livros = new StreamReader(listLivros);
             while (livros.EndOfStream != true)
             {
                 aux = livros.ReadLine().Split(";");
-                for (int i = 0; i < aux.Length; i++)
-                {
-                    if (aux[i].Contains(","))
-                    {
-                        string[] subString = aux[1].Split(",");
-                        aux[1] = subString[1] + " " + subString[0];
-                        Console.WriteLine($"{descricao[i]} : {aux[i]}");
-                    }
-                    else
-                        Console.WriteLine($"{descricao[i]} : {aux[i]}");
-                }
+                Console.WriteLine(searchBook(aux[0]));
                 Console.WriteLine("\n-----------------\n");
                 aux.Initialize();
             }
-
             livros.Close();
             Console.WriteLine("Pressione Enter para voltar ao Menu inicial");
             Console.ReadKey();
-        }
-        /// <summary>
-        /// Método para mostrar relatório com todos os livros já emprestados de um determinado usuário incluindo se foram entregues
-        /// atrasados ou dentro do praso
-        /// </summary>
-        public static void Relatorio()
-        {
-
         }
         /// <summary>
         /// Programa principal
@@ -351,9 +339,6 @@ namespace Biblioteca
                             Acervo();
                             break;
                         case 6:
-                            Relatorio();
-                            break;
-                        case 7:
                             getOperacaos(user);
                             Console.ReadKey();
                             break;
@@ -373,6 +358,18 @@ namespace Biblioteca
                 {
                     Console.WriteLine("Código inválido!");
                     Console.WriteLine(nREx.Message);
+                    Console.ReadKey();
+                }
+                catch (NotImplementedException e)
+                {
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine(e.Message);
+                    Console.ReadKey();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("ERRO!");
+                    Console.WriteLine(e.Message);
                     Console.ReadKey();
                 }
             } while (op != 0);

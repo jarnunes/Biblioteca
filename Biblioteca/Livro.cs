@@ -55,6 +55,15 @@ namespace Biblioteca
         {
             return categoria.emprestar(usuario, data);
         }
+
+        public override string ToString()
+        {
+            StringBuilder dadosLivro = new StringBuilder();
+            dadosLivro.AppendLine($"Titulo: {this.Titulo}");
+            dadosLivro.AppendLine($"Código: {this.ID}");
+            dadosLivro.AppendLine($"Categoria: {this.categoria}");
+            return dadosLivro.ToString();
+        }
         #endregion
     }
 }

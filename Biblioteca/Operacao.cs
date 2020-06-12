@@ -83,9 +83,6 @@ namespace Biblioteca
         public override string ToString()
         {
             StringBuilder escrever = new StringBuilder();
-
-
-
             if (Livro.Categoria.ToString().Equals("Digital"))
             {
                 escrever.AppendLine("----------------------");
@@ -105,6 +102,7 @@ namespace Biblioteca
                     escrever.AppendLine($"Código Livro: {Livro.CodigoLivro}");
                     escrever.AppendLine($"Categoria: {Livro.Categoria.ToString()}");
                     escrever.AppendLine($"Data retirada: {this.Retirada.ToString("dd/MM/yyyy")}");
+                    escrever.AppendLine($"Data devolucao: {this.Devolucao.ToString("dd/MM/yyyy")}");
                 }
                 else
                 {
