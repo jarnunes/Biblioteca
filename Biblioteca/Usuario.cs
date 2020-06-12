@@ -22,9 +22,14 @@ namespace Biblioteca
         protected bool situacaoUsuario;
         protected List<Operacao> operacoes;
         protected List<Operacao> emprestimos;
-        protected const int totalDiasBase = 7;
+        protected int totalDiasBase = 7;
         protected int maxLivros;
         #endregion
+        public int LimiteDiasEmprestimo
+        {
+            get { return this.totalDiasBase; }
+            private set { }
+        }
 
         #region Construtores
         /// <summary>

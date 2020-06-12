@@ -33,6 +33,7 @@ namespace Biblioteca
             Operacao aux = default;
             if (situacao() && situacao(livro))
             {
+
                 aux = livro.emprestar(this, data.AddDays(totalDiasBase));
                 this.operacoes.Add(aux);
                 if (aux.Devolucao != default)

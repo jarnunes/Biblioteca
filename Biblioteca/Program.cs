@@ -34,15 +34,15 @@ namespace Biblioteca
 
             Console.Write("MATRICULA: ");
             int matricula = int.Parse(Console.ReadLine());
-
             if (searchUser(user, matricula) != default)
             {
+                Usuario userOperacao = searchUser(user, matricula);
                 while (dadosOperacoes.EndOfStream != true)
                 {
                     aux = dadosOperacoes.ReadLine().Split(";");
                     if (int.Parse(aux[0]).Equals(matricula))
                     {
-                        auxOP = new Operacao(searchBook(aux[1]), DateTime.Parse(aux[3]), int.Parse(aux[2]));
+                        auxOP = new Operacao(searchBook(aux[1]), DateTime.Parse(aux[3]), int.Parse(aux[2]), userOperacao);
                         opUsuarios.Add(auxOP);
                     }
                 }
@@ -83,24 +83,7 @@ namespace Biblioteca
             arquivo.Close();
             return usuarios;
         }
-        /// <summary>
-        /// Método para carregar lista de operacoes em um arraylist
-        /// </summary>
-        /// <returns></returns>
-        /*
-        private static void getOperacaos(List<Usuario> user)
-        {
-            Console.Clear();
-            Usuario aux = default;
-            Console.Write("MATRICULA: ");
-            int matricula = int.Parse(Console.ReadLine());
-            if (searchUser(user, matricula) != default)
-            {
-                aux = searchUser(user, matricula);
-                Console.WriteLine(aux.getOperacoes());
-            }
 
-        }*/
         /// <summary>
         /// Menu com opções para o usuario
         /// </summary>
@@ -332,7 +315,6 @@ namespace Biblioteca
         {
 
         }
-
         /// <summary>
         /// Programa principal
         /// </summary>
