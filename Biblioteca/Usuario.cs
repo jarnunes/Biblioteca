@@ -52,7 +52,6 @@ namespace Biblioteca
         public abstract Operacao emprestar(Livro livro, DateTime data);
         public abstract int devolver(Livro livro, DateTime data);
         public abstract bool situacao();
-        public abstract bool situacao(Livro livro);
         public string relatorio()
         {
 

@@ -72,4 +72,3 @@
 115817;Marcos A Quirino;1
 116001;Marcos M Ribeiro;1
 116308;Leonardo J Batista;0
-681814;Jardel Nunes;0

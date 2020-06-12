@@ -12,6 +12,7 @@ namespace Biblioteca
         protected string _titulo;
         protected IEmprestavel categoria;
         #endregion
+
         #region Propriedades
         public int CodigoLivro
         {

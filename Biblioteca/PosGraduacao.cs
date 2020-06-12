@@ -31,7 +31,7 @@ namespace Biblioteca
         public override Operacao emprestar(Livro livro, DateTime data)
         {
             Operacao aux = default;
-            if (situacao() && situacao(livro))
+            if (situacao())
             {
                 aux = livro.emprestar(this, data.AddDays(totalDiasBase));
                 this.operacoes.Add(aux);
@@ -53,54 +53,39 @@ namespace Biblioteca
         {
             StreamWriter empresti_dev = new StreamWriter(dadosOperacoes, true);
             TimeSpan aux = default;
+            int totDiasAtraso = 0;
             foreach (Operacao p in this.emprestimos)
             {
-                //O livro passado como parametro não está sendo considerado igual ao livro que está na lista de emprestados
-                if (p.Livro.Equals(livro))
+                Livro auslivro = p.Livro;
+                if (auslivro.CodigoLivro.Equals(livro.CodigoLivro))
                 {
-                    empresti_dev.WriteLine($"{this.codUser};{livro.CodigoLivro};1;{data}");
+                    empresti_dev.WriteLine($"{this.codUser};{livro.CodigoLivro};1;{data.ToString("dd/MM/yyyy")}");
+                    empresti_dev.Close();
                     aux = DateTime.Now.Subtract(p.Devolucao);
 
-                    if (aux.TotalDays >= 0)
+                    if (aux.TotalDays > 0)
                     {
                         p.ProximaRetirada = DateTime.Now.AddDays(aux.TotalDays * 2);
                         this.situacaoUsuario = false;
+                        totDiasAtraso = (int)aux.TotalDays;
                     }
                     else
-                    this.situacaoUsuario = true;
+                    {
+                        this.situacaoUsuario = true;
+                        totDiasAtraso = 0;
+                    }
+
                     this.operacoes.Add(p);
                     this.emprestimos.Remove(p);
                 }
+                return totDiasAtraso;
             }
-            empresti_dev.Close();
-            return (int)(aux.TotalDays);
+            return totDiasAtraso;
         }
         /// <summary>
         /// Método para validar a situação de um aluno
         /// </summary>
         /// <returns>retorna true caso não tenha livros em atraso, e false caso esteja em atraso.</returns>
-        public override bool situacao(Livro livro)
-        {
-            Boolean aux = false;
-            foreach (Operacao item in emprestimos)
-            {
-                if (item.Livro.Equals(livro))
-                {
-                    aux = false;
-                }
-                else
-                {
-                    aux = true;
-                }
-            }
-
-            if (this.emprestimos.Count < this.maxLivros)
-                aux = true;
-            else
-                aux = false;
-
-            return aux;
-        }
         public override bool situacao()
         {
             if (this.emprestimos.Count < maxLivros)
@@ -124,7 +109,10 @@ namespace Biblioteca
             }
             return livros.ToString();
         }
-
+        /// <summary>
+        /// Método para retornar operações de um aluno de pós-graduacao
+        /// </summary>
+        /// <returns>String com operações </returns>
         public override string getOperacoes()
         {
             StringBuilder op = new StringBuilder();

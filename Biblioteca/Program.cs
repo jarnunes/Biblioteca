@@ -25,24 +25,26 @@ namespace Biblioteca
         public static void getOperacaos(List<Usuario> user)
         {
             Console.Clear();
-
             List<Operacao> opUsuarios = new List<Operacao>();
             StreamReader dadosOperacoes = new StreamReader(listOperacoes);
             Operacao auxOP;
             string[] aux;
 
             Console.Write("MATRICULA: ");
-            int matricula = int.Parse(Console.ReadLine());
-            if (searchUser(user, matricula) != default)
+            Usuario userOperacao = searchUser(user, int.Parse(Console.ReadLine()));
+            if (userOperacao != default)
             {
-                Usuario userOperacao = searchUser(user, matricula);
                 while (dadosOperacoes.EndOfStream != true)
                 {
                     aux = dadosOperacoes.ReadLine().Split(";");
-                    if (int.Parse(aux[0]).Equals(matricula))
+                    if (int.Parse(aux[0]).Equals(userOperacao.CodUser))
                     {
-                        auxOP = new Operacao(searchBook(aux[1]), DateTime.Parse(aux[3]), int.Parse(aux[2]), userOperacao);
-                        opUsuarios.Add(auxOP);
+                        Livro livroProcurado = searchBook(aux[1]);
+                        if (livroProcurado != null)
+                        {
+                            auxOP = new Operacao(livroProcurado, DateTime.Parse(aux[3]), int.Parse(aux[2]), userOperacao);
+                            opUsuarios.Add(auxOP);
+                        }
                     }
                 }
                 foreach (Operacao item in opUsuarios)
@@ -53,6 +55,10 @@ namespace Biblioteca
             }
             dadosOperacoes.Close();
         }
+        /// <summary>
+        /// Método para carregar lista de usuarios
+        /// </summary>
+        /// <returns>lista de usuarios</returns>
         public static List<Usuario> getUsuarios()
         {
             List<Usuario> usuarios = new List<Usuario>();
@@ -82,7 +88,6 @@ namespace Biblioteca
             arquivo.Close();
             return usuarios;
         }
-
         /// <summary>
         /// Menu com opções para o usuario
         /// </summary>
@@ -149,7 +154,7 @@ namespace Biblioteca
             while (aux.EndOfStream != true)
             {
                 string[] livro = aux.ReadLine().Split(";");
-                if (livro[0].Equals(codBook))
+                if (livro[0].Equals(codBook) && livro.Length.Equals(3))
                 {
                     if (livro[1].Contains(","))
                     {
@@ -158,6 +163,7 @@ namespace Biblioteca
                     }
 
                     emprestar = new Livro(int.Parse(livro[0]), livro[1], int.Parse(livro[2]));
+                    return emprestar;
                 }
             }
             aux.Close();
@@ -220,16 +226,16 @@ namespace Biblioteca
                 Console.Clear();
                 Console.Write("MATRICULA: ");
                 int matricula = int.Parse(Console.ReadLine());
-                if (searchUser(user, matricula) != default && searchUser(user, matricula).getLivrosEmprestados() != null)
+                aux = searchUser(user, matricula);
+                if (aux != default && aux.getLivrosEmprestados() != null)
                 {
-                    Console.Write("Código Livro: ");
-                    string codigo = Console.ReadLine();
-                    if (searchBook(codigo).CodigoLivro != default)
+                    Console.WriteLine(aux.getLivrosEmprestados());
+                    Console.Write("\n\nCódigo Livro: ");
+                    Livro livroProcurado = searchBook(Console.ReadLine());
+                    if (livroProcurado != default)
                     {
-                        aux = searchUser(user, matricula);
-                        Console.WriteLine($"O livro foi entregue {aux.devolver(searchBook(codigo), DateTime.Now)} dias atrasado");
+                        Console.WriteLine($"O livro foi entregue {aux.devolver(livroProcurado, DateTime.Now)} dias atrasado");
                     }
-
                     do
                     {
                         Console.WriteLine("Deseja realizar outra operação?");
@@ -245,11 +251,9 @@ namespace Biblioteca
                             Console.ReadKey();
                             Console.Clear();
                         }
-
                     } while (op != 1 && op != 2);
                 }
             } while (op != 2);
-
         }
         /// <summary>
         /// Método de MENU para obter situação de determinado usuario
@@ -275,11 +279,8 @@ namespace Biblioteca
         /// <param name="user"></param>
         public static void LivrosEmprestados(List<Usuario> user)
         {
-
             Console.Clear();
-
             Usuario aux = default;
-
             Console.Write("MATRICULA: ");
             int matricula = int.Parse(Console.ReadLine());
             if (searchUser(user, matricula) != default)
@@ -287,7 +288,6 @@ namespace Biblioteca
                 aux = searchUser(user, matricula);
                 Console.WriteLine(aux.getLivrosEmprestados());
             }
-
             Console.ReadKey();
         }
         /// <summary>
@@ -319,9 +319,7 @@ namespace Biblioteca
         public static void Main(string[] args)
         {
             List<Usuario> user = getUsuarios();
-
             int op = 0;
-
             do
             {
                 try
