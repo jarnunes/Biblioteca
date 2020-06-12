@@ -67,7 +67,7 @@ namespace Biblioteca
                         this.situacaoUsuario = false;
                     }
                     else
-                        this.situacaoUsuario = true;
+                    this.situacaoUsuario = true;
                     this.operacoes.Add(p);
                     this.emprestimos.Remove(p);
                 }
@@ -124,6 +124,7 @@ namespace Biblioteca
             }
             return livros.ToString();
         }
+
         public override string getOperacoes()
         {
             StringBuilder op = new StringBuilder();

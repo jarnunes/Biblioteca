@@ -22,7 +22,6 @@ namespace Biblioteca
         /// <summary>
         /// Menu para mostrar ao usuário opções da biblioteca 
         /// </summary>
-        /// <returns>retorna inteiro com opção escolhida</returns>
         public static void getOperacaos(List<Usuario> user)
         {
             Console.Clear();
@@ -103,11 +102,21 @@ namespace Biblioteca
                 Console.WriteLine("5 - Acervo");
                 Console.WriteLine("6 - Relatório");
                 Console.WriteLine("0 - Sair");
-
-                op = int.Parse(Console.ReadKey().KeyChar.ToString());
-
-                if (op < 0 && op > 7)
-                    op = -1;
+                try
+                {
+                    op = int.Parse(Console.ReadKey().KeyChar.ToString());
+                }
+                catch (FormatException fEx)
+                {
+                    Console.WriteLine("\nERRO!");
+                    Console.WriteLine(fEx.Message);
+                    Console.ReadKey();
+                }
+                finally
+                {
+                    if (op < 0 && op > 7)
+                        op = -1;
+                }
 
             } while (op == -1);
             return op;
@@ -215,6 +224,7 @@ namespace Biblioteca
                 {
                     Console.Write("Código Livro: ");
                     string codigo = Console.ReadLine();
+                    if (searchBook(codigo).CodigoLivro != default)
                     {
                         aux = searchUser(user, matricula);
                         Console.WriteLine($"O livro foi entregue {aux.devolver(searchBook(codigo), DateTime.Now)} dias atrasado");
@@ -277,7 +287,6 @@ namespace Biblioteca
                 aux = searchUser(user, matricula);
                 Console.WriteLine(aux.getLivrosEmprestados());
             }
-
 
             Console.ReadKey();
         }
@@ -350,7 +359,7 @@ namespace Biblioteca
                 }
                 catch (FormatException fEx)
                 {
-                    Console.WriteLine("Usuário não encontrado"!);
+                    Console.WriteLine("ERRO!"!);
                     Console.WriteLine(fEx.Message);
                     Console.ReadKey();
                 }
